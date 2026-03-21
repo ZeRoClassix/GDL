@@ -1,0 +1,238 @@
+/* =========================
+   Leaderboard Page – Pointercrate style
+   JS hooks preserved: .page-leaderboard-container,
+   .page-leaderboard, .board-container, .player-container,
+   .board, .player, .rank, .user, .total
+========================= */
+
+.page-leaderboard-container {
+    display: block;
+    height: 100%;
+    overflow-y: auto;
+    background: var(--color-background);
+}
+
+/* ---- Main grid layout ---- */
+.page-leaderboard {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(22rem, 2fr) 3fr;
+    grid-template-rows: max-content 1fr;
+    column-gap: 0;
+    max-width: 84rem;
+    margin: 0 auto;
+}
+
+.page-leaderboard > div {
+    overflow-y: auto;
+}
+
+/* Error row */
+.page-leaderboard .error-container {
+    grid-row: 1;
+    grid-column: 1 / span 2;
+    padding: 1rem 1.5rem 0;
+}
+
+.page-leaderboard .error-container .error {
+    padding: 0.75rem 1rem;
+    background: rgba(229, 62, 62, 0.1);
+    border: 1px solid rgba(229, 62, 62, 0.3);
+    color: var(--color-error);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+}
+
+/* ---- Board sidebar ---- */
+.page-leaderboard .board-container,
+.page-leaderboard .player-container {
+    grid-row: 2;
+    padding-block: 1.5rem;
+}
+
+.page-leaderboard .board-container {
+    padding-inline: 0;
+    background: var(--color-background-sidebar);
+    border-right: 1px solid var(--color-border);
+}
+
+/* ---- Leaderboard Table ---- */
+.page-leaderboard .board {
+    table-layout: auto;
+    display: block;
+    width: 100%;
+}
+
+.page-leaderboard .board tr {
+    transition: background var(--transition-fast);
+    border-left: 3px solid transparent;
+}
+
+.page-leaderboard .board tr:hover {
+    background: var(--color-background-hover);
+}
+
+/* Rank column */
+.page-leaderboard .board .rank {
+    padding: 0 0.75rem 0 1rem;
+    text-align: end;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--color-on-background-muted);
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Points column */
+.page-leaderboard .board .total {
+    padding: 0 1rem;
+    text-align: end;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* User column */
+.page-leaderboard .board .user {
+    width: 100%;
+    vertical-align: middle;
+    padding: 0.15rem 0.5rem 0.15rem 0;
+}
+
+/* Player button */
+.page-leaderboard .board .user button {
+    width: 100%;
+    background: transparent;
+    color: var(--color-on-background);
+    border: none;
+    border-left: 3px solid transparent;
+    padding: 0.7rem 1rem;
+    text-align: start;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    font-family: 'Nunito', 'Lexend Deca', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+    display: block;
+    border-radius: 0;
+}
+
+.page-leaderboard .board .user button:hover {
+    background: var(--color-background-hover);
+    color: var(--color-primary);
+}
+
+/* Active selected player */
+.page-leaderboard .board .user.active button {
+    background: rgba(74, 144, 217, 0.1);
+    color: var(--color-primary);
+    font-weight: 700;
+    border-left-color: var(--color-primary);
+}
+
+/* ---- Player Detail Panel ---- */
+.page-leaderboard .player-container {
+    padding-inline: 2rem;
+}
+
+.page-leaderboard .player {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    max-width: 56rem;
+}
+
+/* Player name heading */
+.page-leaderboard .player h1 {
+    font-family: 'Lexend Deca', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-on-background);
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+}
+
+/* Section headings */
+.page-leaderboard .player h2 {
+    font-family: 'Lexend Deca', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-on-background);
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 0.45rem;
+}
+
+/* Stats table in player detail */
+.page-leaderboard .player .table {
+    /* auto lets each column size to its content */
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.page-leaderboard .player .table tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background var(--transition-fast);
+}
+
+.page-leaderboard .player .table tr:hover {
+    background: var(--color-background-hover);
+}
+
+/* Rank column – never shrink, clear right margin */
+.page-leaderboard .player .table .rank {
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 0.7rem 1rem 0.7rem 0;
+    text-align: end;
+}
+
+.page-leaderboard .player .table .rank p {
+    font-weight: 700;
+    color: var(--color-on-background-muted);
+    font-size: 0.82rem;
+    padding: 0;          /* override global p padding-block */
+}
+
+/* Level name column – takes all remaining width */
+.page-leaderboard .player .table .level {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    vertical-align: middle;
+    font-weight: 600;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+/* Score column – never shrink, right-aligned */
+.page-leaderboard .player .table .score {
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 0.7rem 0 0.7rem 0.75rem;
+    text-align: end;
+}
+
+.page-leaderboard .player .table .score p {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    padding: 0;          /* override global p padding-block */
+}
+
+/* Links */
+.page-leaderboard .player .table a {
+    transition: color var(--transition-fast);
+    font-weight: 600;
+}
+
+.page-leaderboard .player .table a:hover {
+    text-decoration: underline;
+    color: var(--color-primary);
+}
